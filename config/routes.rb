@@ -1,6 +1,8 @@
 Refinery::Core::Engine.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
+      resources :resources, only: [:index, :show]
+
       resources :promotions, only: [:show]
 
       resources :products do
