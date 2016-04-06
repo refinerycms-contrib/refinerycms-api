@@ -1,16 +1,20 @@
-require 'rubygems'
-require 'rake'
-require 'rake/testtask'
-require 'rspec/core/rake_task'
-require 'spree/testing_support/common_rake'
-require 'rails/all'
-
-RSpec::Core::RakeTask.new
-
-task default: :spec
-
-desc "Generates a dummy app for testing"
-task :test_app do
-  ENV['LIB_NAME'] = 'spree/api'
-  Rake::Task['common:test_app'].invoke
+#!/usr/bin/env rake
+begin
+  require 'bundler/setup'
+rescue LoadError
+  puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
+
+ENGINE_PATH = File.dirname(__FILE__)
+APP_RAKEFILE = File.expand_path("../spec/dummy/Rakefile", __FILE__)
+
+if File.exists?(APP_RAKEFILE)
+  load 'rails/tasks/engine.rake'
+end
+
+require "refinerycms-testing"
+Refinery::Testing::Railtie.load_dummy_tasks(ENGINE_PATH)
+
+load File.expand_path('../tasks/rspec.rake', __FILE__)
+
+task :default => :spec
