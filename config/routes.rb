@@ -1,4 +1,4 @@
-Spree::Core::Engine.add_routes do
+Refinery::Core::Engine.add_routes do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :promotions, only: [:show]

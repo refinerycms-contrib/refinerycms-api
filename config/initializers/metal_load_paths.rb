@@ -1,1 +1,1 @@
-Spree::Api::BaseController.append_view_path(ApplicationController.view_paths)
+Refinery::Api::BaseController.append_view_path(ApplicationController.view_paths)

@@ -1,7 +1,7 @@
-class AddIndexToUserSpreeApiKey < ActiveRecord::Migration
+class AddIndexToUserRefineryApiKey < ActiveRecord::Migration
   def change
     unless defined?(User)
-      add_index :spree_users, :spree_api_key
+      add_index :refinery_users, :refinery_api_key
     end
   end
 end

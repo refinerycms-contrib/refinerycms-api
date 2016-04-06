@@ -1,7 +1,7 @@
-class RenameApiKeyToSpreeApiKey < ActiveRecord::Migration
+class RenameApiKeyToRefineryApiKey < ActiveRecord::Migration
   def change
     unless defined?(User)
-      rename_column :spree_users, :api_key, :spree_api_key
+      rename_column :refinery_users, :api_key, :refinery_api_key
     end
   end
 end
