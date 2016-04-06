@@ -1,4 +1,4 @@
-Refinery::Core::Engine.add_routes do
+Refinery::Core::Engine.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :promotions, only: [:show]
