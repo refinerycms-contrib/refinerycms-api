@@ -16,4 +16,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'refinerycms-core',  ['~> 3.0', '>= 3.0.0']
   s.add_dependency 'rabl', '~> 0.12.0'
   s.add_dependency 'versioncake', '~> 2.3.1'
+  s.add_dependency 'responders'
 end
