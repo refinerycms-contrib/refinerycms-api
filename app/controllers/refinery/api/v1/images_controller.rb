@@ -3,52 +3,23 @@ module Refinery
     module V1
       class ImagesController < Refinery::Api::BaseController
         def index
-          @images = scope.images.accessible_by(current_ability, :read)
-          respond_with(@images)
+          if params[:ids]
+            @resources = Refinery::Resource.includes(:translations).accessible_by(current_ability, :read).where(id: params[:ids].split(','))
+          else
+            @resources = Refinery::Resource.includes(:translations).accessible_by(current_ability, :read).load.ransack(params[:q]).result
+          end
+          respond_with(@resources)
         end
 
         def show
-          @image = Image.accessible_by(current_ability, :read).find(params[:id])
-          respond_with(@image)
-        end
-
-        def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
-        end
-
-        def update
-          @image = scope.images.accessible_by(current_ability, :update).find(params[:id])
-          if @image.update_attributes(image_params)
-            respond_with(@image, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
-        end
-
-        def destroy
-          @image = scope.images.accessible_by(current_ability, :destroy).find(params[:id])
-          @image.destroy
-          respond_with(@image, status: 204)
+          @resource = Refinery::Resource.includes(:translations).accessible_by(current_ability, :read).find(params[:id])
+          respond_with(@resource)
         end
 
         private
 
-        def image_params
-          params.require(:image).permit(permitted_image_attributes)
-        end
-
-        def scope
-          if params[:product_id]
-            Refinery::Product.friendly.find(params[:product_id])
-          elsif params[:variant_id]
-            Refinery::Variant.find(params[:variant_id])
-          end
+        def resource_params
+          params.require(:resource).permit(permitted_resource_attributes)
         end
       end
     end

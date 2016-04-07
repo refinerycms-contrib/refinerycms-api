@@ -17,7 +17,7 @@ module Refinery
         end
 
         private
-        
+
         def resource_params
           params.require(:resource).permit(permitted_resource_attributes)
         end

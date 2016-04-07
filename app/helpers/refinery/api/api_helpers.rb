@@ -2,34 +2,10 @@ module Refinery
   module Api
     module ApiHelpers
       ATTRIBUTES = [
-        :product_attributes,
-        :product_property_attributes,
-        :variant_attributes,
         :image_attributes,
-        :option_value_attributes,
-        :order_attributes,
-        :line_item_attributes,
-        :option_type_attributes,
-        :payment_attributes,
-        :payment_method_attributes,
-        :shipment_attributes,
-        :taxonomy_attributes,
-        :taxon_attributes,
-        :address_attributes,
-        :country_attributes,
-        :state_attributes,
-        :adjustment_attributes,
-        :inventory_unit_attributes,
-        :return_authorization_attributes,
-        :creditcard_attributes,
-        :payment_source_attributes,
-        :user_attributes,
-        :property_attributes,
-        :stock_location_attributes,
-        :stock_movement_attributes,
-        :stock_item_attributes,
-        :promotion_attributes,
-        :store_attributes
+        :page_attributes,
+        :page_part_attributes,
+        :resource_attributes
       ]
 
       mattr_reader *ATTRIBUTES
@@ -95,6 +71,17 @@ module Refinery
       @@shipment_attributes = [:id, :tracking, :number, :cost, :shipped_at, :state]
 
       @@taxonomy_attributes = [:id, :name]
+
+      @@page_attributes = [
+        :id, :parent_id, :path, :slug, :custom_slug, :show_in_menu,
+        :link_url, :menu_match, :deletable, :draft, :skip_to_first_child,
+        :lft, :rgt, :depth, :view_template, :layout_template, :created_at,
+        :updated_at
+      ]
+
+      @@page_part_attributes = [
+        :id, :refinery_page_id, :slug, :body, :position, :created_at, :updated_at, :title
+      ]
 
       @@taxon_attributes = [
         :id, :name, :pretty_name, :permalink, :parent_id,

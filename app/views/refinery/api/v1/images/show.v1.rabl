@@ -1,6 +1,2 @@
 object @image
-attributes *image_attributes
-attributes :viewable_type, :viewable_id
-Refinery::Image.attachment_definitions[:attachment][:styles].each do |k,v|
-  node("#{k}_url") { |i| i.attachment.url(k) }
-end
+attributes *[:id, :image_mime_type, :image_name, :image_size, :image_width, :image_height, :image_uid, :created_at, :updated_at, :image_title, :image_alt]
