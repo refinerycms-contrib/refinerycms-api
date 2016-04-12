@@ -4,7 +4,6 @@ module Refinery
   module Api
     class BaseController < ActionController::Base
       include Refinery::Api::ControllerSetup
-      include Refinery::Core::ControllerHelpers::Store
       include Refinery::Core::ControllerHelpers::StrongParameters
 
       attr_accessor :current_api_user
