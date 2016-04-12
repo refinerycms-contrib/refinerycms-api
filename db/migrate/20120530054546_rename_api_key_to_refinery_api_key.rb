@@ -1,6 +1,6 @@
 class RenameApiKeyToRefineryApiKey < ActiveRecord::Migration
   def change
-    unless defined?(User)
+    if defined?(User)
       rename_column :refinery_users, :api_key, :refinery_api_key
     end
   end
