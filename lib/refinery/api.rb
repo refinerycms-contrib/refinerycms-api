@@ -11,6 +11,7 @@ module Refinery
     require 'refinery/api/configuration'
 
     autoload :Version, 'refinery/api/version'
+    autoload :TokenGenerator, 'refinery/api/token_generator'
 
     class GatewayError < RuntimeError; end
 
