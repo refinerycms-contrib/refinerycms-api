@@ -97,7 +97,7 @@ module Refinery
       end
 
       def requires_authentication?
-        Refinery::Api::Config[:requires_authentication]
+        Refinery::Api.requires_authentication
       end
 
       def not_found
