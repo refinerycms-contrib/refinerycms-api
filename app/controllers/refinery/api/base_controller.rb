@@ -19,7 +19,7 @@ module Refinery
       rescue_from ActiveRecord::RecordInvalid, with: :error_during_processing
       rescue_from ActiveRecord::RecordNotFound, with: :not_found
       rescue_from CanCan::AccessDenied, with: :unauthorized
-      rescue_from Refinery::Core::GatewayError, with: :gateway_error
+      rescue_from Refinery::Api::GatewayError, with: :gateway_error
 
       helper Refinery::Api::ApiHelpers
 

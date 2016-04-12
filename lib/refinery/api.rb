@@ -12,6 +12,8 @@ module Refinery
 
     autoload :Version, 'refinery/api/version'
 
+    class GatewayError < RuntimeError; end
+
     class << self
       attr_writer :root
 
