@@ -3,10 +3,8 @@ module Refinery
     module ControllerHelpers
       module Auth
         extend ActiveSupport::Concern
-        include Refinery::Api::TokenGenerator
 
         included do
-          before_action :set_guest_token
           helper_method :try_refinery_current_user
 
           rescue_from CanCan::AccessDenied do |exception|
@@ -22,12 +20,6 @@ module Refinery
         def redirect_back_or_default(default)
           redirect_to(session["refinery_user_return_to"] || request.env["HTTP_REFERER"] || default)
           session["refinery_user_return_to"] = nil
-        end
-
-        def set_guest_token
-          if cookies.signed[:guest_token].blank?
-            cookies.permanent.signed[:guest_token] = generate_guest_token
-          end
         end
 
         def store_location
