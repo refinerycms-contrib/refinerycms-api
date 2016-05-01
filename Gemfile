@@ -10,6 +10,8 @@ git "https://github.com/refinery/refinerycms", branch: "master" do
   end
 end
 
+gem "refinerycms-authentication-devise", '~> 1.0.4'
+
 # Database Configuration
 unless ENV["TRAVIS"]
   gem "activerecord-jdbcsqlite3-adapter", :platform => :jruby

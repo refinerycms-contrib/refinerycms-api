@@ -57,7 +57,7 @@ module Refinery
       end
 
       def load_user
-        @current_api_user = authorisation_manager.current_user.class.find_by(refinery_api_key: api_key.to_s)
+        @current_api_user = Refinery::Api.user_class.find_by(refinery_api_key: api_key.to_s)
       end
 
       def authenticate_user
@@ -69,12 +69,12 @@ module Refinery
           render "refinery/api/errors/invalid_api_key", status: 401 and return
         else
           # An anonymous user
-          @current_api_user = authorisation_manager.current_user.class.new
+          @current_api_user = Refinery::Api.user_class.new
         end
       end
 
       def load_user_roles
-        @current_user_roles = @current_api_user ? @current_api_user.refinery_roles.pluck(:name) : []
+        @current_user_roles = @current_api_user ? @current_api_user.roles.pluck(:title) : []
       end
 
       def unauthorized
