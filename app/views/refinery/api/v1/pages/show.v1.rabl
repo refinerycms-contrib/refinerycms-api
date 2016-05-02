@@ -1,11 +1,6 @@
 object @page
+attributes *page_attributes
 
-if params[:set] == 'nested'
-  extends "spree/api/v1/pages/nested"
-else
-  attributes *page_attributes
-
-  child root: :page_parts do
-    attributes *page_part_attributes
-  end
+child :parts => :page_parts do
+  attributes *page_part_attributes
 end

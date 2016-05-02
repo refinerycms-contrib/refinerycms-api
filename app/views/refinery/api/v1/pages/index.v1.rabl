@@ -1,4 +1,8 @@
 object false
-child(@pages => :pages) do
-  extends "spree/api/v1/pages/show"
+node(:count) { @pages.count }
+child @pages => :pages do
+  attributes *page_attributes
+  unless params[:without_children]
+    extends "refinery/api/v1/pages/pages"
+  end
 end

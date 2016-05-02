@@ -28,7 +28,27 @@ Then restart your server.
 
 ```ruby
 $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/pages.json
+$ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/pages/1.json
 ```
+
+### Images
+
+```ruby
+$ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/images.json
+$ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/images/1.json
+```
+
+### Resources
+
+```ruby
+$ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/resources.json
+$ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/resources/1.json
+```
+
+## TODO
+[ ] Add translated fields in JSON
+[ ] Fix Abilities
+[ ] Fix specs
 
 ## Contributing
 

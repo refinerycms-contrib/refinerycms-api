@@ -4,15 +4,24 @@ module Refinery
       class ResourcesController < Refinery::Api::BaseController
         def index
           if params[:ids]
-            @resources = Refinery::Resource.includes(:translations).accessible_by(current_ability, :read).where(id: params[:ids].split(','))
+            @resources = Refinery::Resource.
+                          includes(:translations).
+                          # accessible_by(current_ability, :read).
+                          where(id: params[:ids].split(','))
           else
-            @resources = Refinery::Resource.includes(:translations).accessible_by(current_ability, :read).load.ransack(params[:q]).result
+            @resources = Refinery::Resource.
+                          includes(:translations).
+                          # accessible_by(current_ability, :read).
+                          load.ransack(params[:q]).result
           end
           respond_with(@resources)
         end
 
         def show
-          @resource = Refinery::Resource.includes(:translations).accessible_by(current_ability, :read).find(params[:id])
+          @resource = Refinery::Resource.
+                        includes(:translations).
+                        # accessible_by(current_ability, :read).
+                        find(params[:id])
           respond_with(@resource)
         end
 

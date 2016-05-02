@@ -4,22 +4,31 @@ module Refinery
       class ImagesController < Refinery::Api::BaseController
         def index
           if params[:ids]
-            @resources = Refinery::Resource.includes(:translations).accessible_by(current_ability, :read).where(id: params[:ids].split(','))
+            @images = Refinery::Image.
+                        includes(:translations).
+                        # accessible_by(current_ability, :read).
+                        where(id: params[:ids].split(','))
           else
-            @resources = Refinery::Resource.includes(:translations).accessible_by(current_ability, :read).load.ransack(params[:q]).result
+            @images = Refinery::Image.
+                        includes(:translations).
+                        # accessible_by(current_ability, :read).
+                        load.ransack(params[:q]).result
           end
-          respond_with(@resources)
+          respond_with(@images)
         end
 
         def show
-          @resource = Refinery::Resource.includes(:translations).accessible_by(current_ability, :read).find(params[:id])
-          respond_with(@resource)
+          @image = Refinery::Image.
+                    includes(:translations).
+                    # accessible_by(current_ability, :read).
+                    find(params[:id])
+          respond_with(@image)
         end
 
         private
 
-        def resource_params
-          params.require(:resource).permit(permitted_resource_attributes)
+        def image_params
+          params.require(:image).permit(permitted_image_attributes)
         end
       end
     end
