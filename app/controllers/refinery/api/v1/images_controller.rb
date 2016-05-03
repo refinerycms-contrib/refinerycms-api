@@ -12,7 +12,8 @@ module Refinery
             @images = Refinery::Image.
                         includes(:translations).
                         # accessible_by(current_ability, :read).
-                        load.ransack(params[:q]).result
+                        # load.ransack(params[:q]).result
+                        all
           end
           respond_with(@images)
         end
