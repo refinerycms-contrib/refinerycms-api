@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Refinery
-  describe Api::V1::TaxonsController, :type => :controller do
+  describe Api::V1::PagesController, :type => :controller do
     render_views
 
     let(:taxonomy) { create(:taxonomy) }
@@ -124,7 +124,7 @@ module Refinery
     end
 
     context "as an admin" do
-      sign_in_as_admin!
+      refinery_login
 
       it "can create" do
         api_post :create, :taxonomy_id => taxonomy.id, :taxon => { :name => "Colors" }
