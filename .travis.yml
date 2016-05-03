@@ -1,0 +1,12 @@
+language: ruby
+cache: bundler
+bundler_args: --without development
+before_script: "bin/rake refinery:testing:dummy_app"
+env:
+  - DB=postgresql
+  - DB=mysql
+rvm:
+  - 2.3.0
+  - 2.2
+  - 2.1
+sudo: false
