@@ -2,12 +2,17 @@
 
 This extension allows you to use a Rest API with Refinery CMS 3.0 and later.
 
+## TODO
+* [ ] Add translated fields in JSON
+* [ ] Improve Abilities
+* [ ] Fix specs
+
 ## Installation
 
 Simply put this in the Gemfile of your Refinery application:
 
 ```ruby
-gem 'refinerycms-api', '~> 1.0.0'
+gem 'refinerycms-api', github: 'refinerycms-contrib/refinerycms-api', master: 'branch'
 ```
 
 Then run `bundle install` to install it.
@@ -44,11 +49,6 @@ $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/
 $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/resources.json
 $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/resources/1.json
 ```
-
-## TODO
-[ ] Add translated fields in JSON
-[ ] Fix Abilities
-[ ] Fix specs
 
 ## Contributing
 
