@@ -22,13 +22,13 @@ module Refinery
         end
 
         def stub_authentication!
-          allow(Refinery.user_class).to receive(:find_by).with(hash_including(:refinery_api_key)) { current_api_user }
+          allow(Refinery::Api.user_class).to receive(:find_by).with(hash_including(:refinery_api_key)) { current_api_user }
         end
 
         # This method can be overriden (with a let block) inside a context
         # For instance, if you wanted to have an admin user instead.
         def current_api_user
-          @current_api_user ||= stub_model(Refinery.user_class, email: "refinery@example.com")
+          @current_api_user ||= stub_model(Refinery::Api.user_class, email: "refinery@example.com")
         end
 
         def image(filename)
