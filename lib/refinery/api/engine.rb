@@ -10,8 +10,8 @@ module Refinery
 
       config.autoload_paths += %W( #{config.root}/lib )
 
-      # config.before_configuration do
-        Rabl.configure do |config|
+      config.before_configuration do
+        ::Rabl.configure do |config|
           config.include_json_root = false
           config.include_child_root = false
 
@@ -23,7 +23,7 @@ module Refinery
 
         config.versioncake.supported_version_numbers = [1]
         config.versioncake.extraction_strategy = :http_header
-      # end
+      end
 
       config.after_initialize do
         Refinery.register_engine(Refinery::Api)
