@@ -1,3 +1,9 @@
+require 'rubygems'
+
+# Configure Rails Environment
+ENV["RAILS_ENV"] ||= 'test'
+
+
 if ENV["COVERAGE"]
   # Run Coverage report
   require 'simplecov'
@@ -22,22 +28,30 @@ rescue LoadError
 end
 
 require 'rspec/rails'
-require 'ffaker'
+# require 'ffaker'
+require 'capybara/rspec'
+
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 
-require 'refinery/testing_support/factories'
-require 'refinery/testing_support/preferences'
+# require 'refinery/testing_support/factories'
+# require 'refinery/testing_support/preferences'
 
 require 'refinery/api/testing_support/caching'
 require 'refinery/api/testing_support/helpers'
 require 'refinery/api/testing_support/setup'
-require 'refinery/testing_support/shoulda_matcher_configuration'
+# require 'refinery/testing_support/shoulda_matcher_configuration'
 
 RSpec.configure do |config|
-  config.backtrace_exclusion_patterns = [/gems\/activesupport/, /gems\/actionpack/, /gems\/rspec/]
+  config.mock_with :rspec
+  config.filter_run :focus => true
+  config.run_all_when_everything_filtered = true
+  config.backtrace_exclusion_patterns = %w(
+    rails actionpack railties capybara activesupport rack warden rspec actionview
+    activerecord dragonfly benchmark
+  ).map { |noisy| /#{noisy}/ }
   config.color = true
   config.fail_fast = ENV['FAIL_FAST'] || false
   config.infer_spec_type_from_file_location!
@@ -47,9 +61,17 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Refinery::Api::TestingSupport::Helpers, :type => :controller
   config.extend Refinery::Api::TestingSupport::Setup, :type => :controller
-  config.include Refinery::TestingSupport::Preferences, :type => :controller
+  # config.include Refinery::TestingSupport::Preferences, :type => :controller
 
   config.before do
-    Refinery::Api::Config[:requires_authentication] = true
+    Refinery::Api.requires_authentication = true
   end
+end
+
+# Requires supporting files with custom matchers and macros, etc,
+# in ./support/ and its subdirectories including factories.
+([Rails.root.to_s] | ::Refinery::Plugins.registered.pathnames).map{|p|
+  Dir[File.join(p, 'spec', 'support', '**', '*.rb').to_s]
+}.flatten.sort.each do |support_file|
+  require support_file
 end
