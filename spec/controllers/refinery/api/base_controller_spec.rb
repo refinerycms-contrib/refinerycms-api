@@ -7,7 +7,7 @@ describe Refinery::Api::BaseController, :type => :controller do
   render_views
   controller(Refinery::Api::BaseController) do
     def index
-      render :text => { "products" => [] }.to_json
+      render :text => { "pages" => [] }.to_json
     end
   end
 
@@ -17,28 +17,28 @@ describe Refinery::Api::BaseController, :type => :controller do
     end
   end
 
-  context "when validating based on an order token" do
-    let!(:order) { create :order }
+  # context "when validating based on an order token" do
+  #   let!(:order) { create :order }
 
-    context "with a correct order token" do
-      it "succeeds" do
-        api_get :index, order_token: order.guest_token, order_id: order.number
-        expect(response.status).to eq(200)
-      end
+  #   context "with a correct order token" do
+  #     it "succeeds" do
+  #       api_get :index, order_token: order.guest_token, order_id: order.number
+  #       expect(response.status).to eq(200)
+  #     end
 
-      it "succeeds with an order_number parameter" do
-        api_get :index, order_token: order.guest_token, order_number: order.number
-        expect(response.status).to eq(200)
-      end
-    end
+  #     it "succeeds with an order_number parameter" do
+  #       api_get :index, order_token: order.guest_token, order_number: order.number
+  #       expect(response.status).to eq(200)
+  #     end
+  #   end
 
-    context "with an incorrect order token" do
-      it "returns unauthorized" do
-        api_get :index, order_token: "NOT_A_TOKEN", order_id: order.number
-        expect(response.status).to eq(401)
-      end
-    end
-  end
+  #   context "with an incorrect order token" do
+  #     it "returns unauthorized" do
+  #       api_get :index, order_token: "NOT_A_TOKEN", order_id: order.number
+  #       expect(response.status).to eq(401)
+  #     end
+  #   end
+  # end
 
   context "cannot make a request to the API" do
     it "without an API key" do
@@ -71,11 +71,11 @@ describe Refinery::Api::BaseController, :type => :controller do
   it 'handles record invalid exceptions' do
     expect(subject).to receive(:authenticate_user).and_return(true)
     expect(subject).to receive(:load_user_roles).and_return(true)
-    resource = Refinery::Product.new
+    resource = Refinery::Page.new
     resource.valid? # get some errors
     expect(subject).to receive(:index).and_raise(ActiveRecord::RecordInvalid.new(resource))
     get :index, token: 'exception-message'
-    expect(json_response).to eql('exception' => "Validation failed: Name can't be blank, Shipping Category can't be blank, Price can't be blank")
+    expect(json_response).to eql('exception' => "Validation failed: Title can't be blank")
   end
 
   it "maps semantic keys to nested_attributes keys" do
