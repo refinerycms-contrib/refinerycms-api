@@ -4,27 +4,27 @@ module Refinery
   describe Api::V1::PagesController, :type => :controller do
     render_views
 
-    let(:taxonomy) { create(:taxonomy) }
-    let(:taxon) { create(:taxon, :name => "Ruby", :taxonomy => taxonomy) }
-    let(:taxon2) { create(:taxon, :name => "Rails", :taxonomy => taxonomy) }
-    let(:attributes) { ["id", "name", "pretty_name", "permalink", "parent_id", "taxonomy_id"] }
+    let(:page_part) { create(:page_part) }
+    let(:page) { create(:page, :title => "Ruby", :page_part => page_part) }
+    let(:page2) { create(:page, :title => "Rails", :page_part => page_part) }
+    let(:attributes) { ["id", "title", "parent_id", "page_part_id"] }
 
     before do
       stub_authentication!
-      taxon2.children << create(:taxon, :name => "3.2.2", :taxonomy => taxonomy)
-      taxon.children << taxon2
+      page2.children << create(:taxon, :name => "3.2.2", :taxonomy => taxonomy)
+      taxon.children << page2
       taxonomy.root.children << taxon
     end
 
     context "as a normal user" do
-      it "gets all taxons for a taxonomy" do
-        api_get :index, :taxonomy_id => taxonomy.id
+      it "gets all pages" do
+        api_get :index
 
-        expect(json_response['taxons'].first['name']).to eq taxon.name
-        children = json_response['taxons'].first['taxons']
+        expect(json_response['pages'].first['title']).to eq page.title
+        children = json_response['pages'].first['pages']
         expect(children.count).to eq 1
-        expect(children.first['name']).to eq taxon2.name
-        expect(children.first['taxons'].count).to eq 1
+        expect(children.first['title']).to eq page2.title
+        expect(children.first['pages'].count).to eq 1
       end
 
       # Regression test for #4112
@@ -86,17 +86,17 @@ module Refinery
       end
 
       it "gets a single taxon" do
-        api_get :show, :id => taxon.id, :taxonomy_id => taxonomy.id
+        api_get :show, :id => page.id, :page_id => page.id
 
-        expect(json_response['name']).to eq taxon.name
-        expect(json_response['taxons'].count).to eq 1
+        expect(json_response['name']).to eq page.name
+        expect(json_response['pages'].count).to eq 1
       end
 
       it "gets all taxons in JSTree form" do
         api_get :jstree, :taxonomy_id => taxonomy.id, :id => taxon.id
         response = json_response.first
-        expect(response["data"]).to eq(taxon2.name)
-        expect(response["attr"]).to eq({ "name" => taxon2.name, "id" => taxon2.id})
+        expect(response["data"]).to eq(page2.name)
+        expect(response["attr"]).to eq({ "name" => page2.name, "id" => page2.id})
         expect(response["state"]).to eq("closed")
       end
 
@@ -124,7 +124,7 @@ module Refinery
     end
 
     context "as an admin" do
-      refinery_login
+      sign_in_as_admin!
 
       it "can create" do
         api_post :create, :taxonomy_id => taxonomy.id, :taxon => { :name => "Colors" }
@@ -139,10 +139,10 @@ module Refinery
       end
 
       it "can update the position in the list" do
-        taxonomy.root.children << taxon2
+        taxonomy.root.children << page2
         api_put :update, :taxonomy_id => taxonomy.id, :id => taxon.id, :taxon => {:parent_id => taxon.parent_id, :child_index => 2 }
         expect(response.status).to eq(200)
-        expect(taxonomy.reload.root.children[0]).to eql taxon2
+        expect(taxonomy.reload.root.children[0]).to eql page2
         expect(taxonomy.reload.root.children[1]).to eql taxon
       end
 
@@ -168,7 +168,7 @@ module Refinery
       end
 
       it "can destroy" do
-        api_delete :destroy, :taxonomy_id => taxonomy.id, :id => taxon.id
+        api_delete :destroy, :page_id => page.id, :id => page.id
         expect(response.status).to eq(204)
       end
     end
