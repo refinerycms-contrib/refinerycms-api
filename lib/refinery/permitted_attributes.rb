@@ -10,7 +10,7 @@ module Refinery
     mattr_reader *ATTRIBUTES
 
     @@image_attributes = [
-      :image_size, :image_title, :image_alt
+      { image: [] }, :image_size, :image_title, :image_alt
     ]
 
     @@page_attributes = [
