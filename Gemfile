@@ -46,6 +46,7 @@ end
 
 group :test do
   gem "launchy"
+  gem 'rspec-activemodel-mocks', '~> 1.0.2'
 end
 
 # Load local gems according to Refinery developer preference.
