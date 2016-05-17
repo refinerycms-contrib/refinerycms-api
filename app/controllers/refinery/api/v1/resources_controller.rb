@@ -6,12 +6,12 @@ module Refinery
           if params[:ids]
             @resources = Refinery::Resource.
                           includes(:translations).
-                          # accessible_by(current_ability, :read).
+                          accessible_by(current_ability, :read).
                           where(id: params[:ids].split(','))
           else
             @resources = Refinery::Resource.
                           includes(:translations).
-                          # accessible_by(current_ability, :read).
+                          accessible_by(current_ability, :read).
                           # load.ransack(params[:q]).result
                           all
           end
@@ -21,7 +21,7 @@ module Refinery
         def show
           @resource = Refinery::Resource.
                         includes(:translations).
-                        # accessible_by(current_ability, :read).
+                        accessible_by(current_ability, :read).
                         find(params[:id])
           respond_with(@resource)
         end

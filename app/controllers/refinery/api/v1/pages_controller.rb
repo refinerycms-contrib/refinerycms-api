@@ -40,14 +40,14 @@ module Refinery
 
         def pages
           @pages = Page.
-                    # accessible_by(current_ability, :read).
+                    accessible_by(current_ability, :read).
                     order('lft').includes(:children)
         end
 
         def page
           @page ||= Page.
                       includes(:parts).
-                      # accessible_by(current_ability, :read).
+                      accessible_by(current_ability, :read).
                       find(params[:id])
         end
 
