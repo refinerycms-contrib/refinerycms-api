@@ -23,7 +23,7 @@ module Refinery
 
       it "can upload a new resource" do
         expect do
-          api_post :create, resource: { file: [upload_file('thinking-cat.jpg', 'text/plain')] }
+          api_post :create, resource: { file: [upload_file('refinery_is_awesome.txt', 'text/plain')] }
           expect(response.status).to eq(201)
           expect(json_response).to have_attributes(attributes)
         end.to change(Resource, :count).by(1)
