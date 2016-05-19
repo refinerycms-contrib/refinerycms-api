@@ -31,12 +31,12 @@ module Refinery
           @current_api_user ||= stub_model(Refinery::Api.user_class, email: "refinery@example.com")
         end
 
-        def image(filename)
+        def file(filename)
           File.open(Refinery::Api::Engine.root + "spec/fixtures" + filename)
         end
 
-        def upload_image(filename)
-          fixture_file_upload(image(filename).path, 'image/jpg')
+        def upload_file(filename, mime_type)
+          fixture_file_upload(file(filename).path, mime_type)
         end
       end
     end

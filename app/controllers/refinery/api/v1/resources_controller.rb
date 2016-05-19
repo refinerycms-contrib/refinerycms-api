@@ -26,6 +26,34 @@ module Refinery
           respond_with(@resource)
         end
 
+        def new
+        end
+
+        def create
+          authorize! :create, Resource
+          @resource = Refinery::Resource.new(resource_params)
+          if @resource.save
+            respond_with(@resource, status: 201, default_template: :show)
+          else
+            invalid_resource!(@resource)
+          end
+        end
+
+        def update
+          @resource = Refinery::Resource.accessible_by(current_ability, :update).find(params[:id])
+          if @resource.update_attributes(resource_params)
+            respond_with(@resource, default_template: :show)
+          else
+            invalid_resource!(@resource)
+          end
+        end
+
+        def destroy
+          @resource = Refinery::Resource.accessible_by(current_ability, :destroy).find(params[:id])
+          @resource.destroy
+          respond_with(@resource, status: 204)
+        end
+
         private
 
         def resource_params

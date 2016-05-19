@@ -23,7 +23,7 @@ module Refinery
 
       it "can upload a new image" do
         expect do
-          api_post :create, image: { image: upload_image('thinking-cat.jpg') }
+          api_post :create, image: { image: [upload_file('thinking-cat.jpg', 'image/jpg')] }
           expect(response.message).to eq(201)
           expect(json_response).to have_attributes(attributes)
         end.to change(Image, :count).by(1)
