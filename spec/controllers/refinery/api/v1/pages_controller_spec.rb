@@ -1,19 +1,20 @@
 require 'spec_helper'
 
 module Refinery
-  describe Api::V1::PagesController, :type => :controller do
+  describe Api::V1::PagesController, type: :controller do
     render_views
 
-    let(:page_part) { create(:page_part) }
-    let(:page) { create(:page, :title => "Ruby", :page_part => page_part) }
-    let(:page2) { create(:page, :title => "Rails", :page_part => page_part) }
-    let(:attributes) { ["id", "title", "parent_id", "page_part_id"] }
+    let(:page_root) { FactoryGirl.create(:page, :title => "Root") }
+    let(:page) { FactoryGirl.create(:page, :title => "Ruby") }
+    let(:page2) { FactoryGirl.create(:page, :title => "Rails") }
+    let(:page_with_page_part) { FactoryGirl.create(:page_with_page_part) }
+    let(:attributes) { ["browser_title", "draft", "link_url", "menu_title", "meta_description", "parent_id", "skip_to_first_child", "show_in_menu", "title", "view_template", "layout_template", "custom_slug", {"parts_attributes"=>["id", "title", "slug", "body", "position"]}] }
 
     before do
       stub_authentication!
-      page2.children << create(:taxon, :name => "3.2.2", :taxonomy => taxonomy)
-      taxon.children << page2
-      taxonomy.root.children << taxon
+      page2.children << create(:page, title: "3.2.2")
+      page.children << page2
+      page_root.root.children << page
     end
 
     context "as a normal user" do
@@ -27,98 +28,89 @@ module Refinery
         expect(children.first['pages'].count).to eq 1
       end
 
-      # Regression test for #4112
       it "does not include children when asked not to" do
-        api_get :index, :taxonomy_id => taxonomy.id, :without_children => 1
+        api_get :index, without_children: 1
 
-        expect(json_response['taxons'].first['name']).to eq(taxon.name)
-        expect(json_response['taxons'].first['taxons']).to be_nil
+        expect(json_response['pages'].first['title']).to eq(page.title)
+        expect(json_response['pages'].first['pages']).to be_nil
       end
 
-      it "paginates through taxons" do
-        new_taxon = create(:taxon, :name => "Go", :taxonomy => taxonomy)
-        taxonomy.root.children << new_taxon
-        expect(taxonomy.root.children.count).to eql(2)
-        api_get :index, :taxonomy_id => taxonomy.id, :page => 1, :per_page => 1
-        expect(json_response["count"]).to eql(1)
-        expect(json_response["total_count"]).to eql(2)
-        expect(json_response["current_page"]).to eql(1)
-        expect(json_response["per_page"]).to eql(1)
-        expect(json_response["pages"]).to eql(2)
-      end
+      # it "paginates through taxons" do
+      #   new_taxon = create(:taxon, :name => "Go", :taxonomy => taxonomy)
+      #   taxonomy.root.children << new_taxon
+      #   expect(taxonomy.root.children.count).to eql(2)
+      #   api_get :index, :taxonomy_id => taxonomy.id, :page => 1, :per_page => 1
+      #   expect(json_response["count"]).to eql(1)
+      #   expect(json_response["total_count"]).to eql(2)
+      #   expect(json_response["current_page"]).to eql(1)
+      #   expect(json_response["per_page"]).to eql(1)
+      #   expect(json_response["pages"]).to eql(2)
+      # end
 
-      describe 'searching' do
-        context 'with a name' do
-          before do
-            api_get :index, :q => { :name_cont => name }
-          end
+      # describe 'searching' do
+      #   context 'with a name' do
+      #     before do
+      #       api_get :index, :q => { :name_cont => name }
+      #     end
 
-          context 'with one result' do
-            let(:name) { "Ruby" }
+      #     context 'with one result' do
+      #       let(:name) { "Ruby" }
 
-            it "returns an array including the matching taxon" do
-              expect(json_response['taxons'].count).to eq(1)
-              expect(json_response['taxons'].first['name']).to eq "Ruby"
-            end
-          end
+      #       it "returns an array including the matching taxon" do
+      #         expect(json_response['taxons'].count).to eq(1)
+      #         expect(json_response['taxons'].first['name']).to eq "Ruby"
+      #       end
+      #     end
 
-          context 'with no results' do
-            let(:name) { "Imaginary" }
+      #     context 'with no results' do
+      #       let(:name) { "Imaginary" }
 
-            it 'returns an empty array of taxons' do
-              expect(json_response.keys).to include('taxons')
-              expect(json_response['taxons'].count).to eq(0)
-            end
-          end
-        end
+      #       it 'returns an empty array of taxons' do
+      #         expect(json_response.keys).to include('taxons')
+      #         expect(json_response['taxons'].count).to eq(0)
+      #       end
+      #     end
+      #   end
 
-        context 'with no filters' do
-          it "gets all taxons" do
-            api_get :index
+      #   context 'with no filters' do
+      #     it "gets all taxons" do
+      #       api_get :index
 
-            expect(json_response['taxons'].first['name']).to eq taxonomy.root.name
-            children = json_response['taxons'].first['taxons']
-            expect(children.count).to eq 1
-            expect(children.first['name']).to eq taxon.name
-            expect(children.first['taxons'].count).to eq 1
-          end
-        end
-      end
+      #       expect(json_response['taxons'].first['name']).to eq taxonomy.root.name
+      #       children = json_response['taxons'].first['taxons']
+      #       expect(children.count).to eq 1
+      #       expect(children.first['name']).to eq taxon.name
+      #       expect(children.first['taxons'].count).to eq 1
+      #     end
+      #   end
+      # end
 
-      it "gets a single taxon" do
-        api_get :show, :id => page.id, :page_id => page.id
+      it "gets a single page" do
+        api_get :show, id: page.id
 
-        expect(json_response['name']).to eq page.name
+        expect(json_response['title']).to eq page.title
         expect(json_response['pages'].count).to eq 1
       end
 
-      it "gets all taxons in JSTree form" do
-        api_get :jstree, :taxonomy_id => taxonomy.id, :id => taxon.id
-        response = json_response.first
-        expect(response["data"]).to eq(page2.name)
-        expect(response["attr"]).to eq({ "name" => page2.name, "id" => page2.id})
-        expect(response["state"]).to eq("closed")
-      end
-
-      it "can learn how to create a new taxon" do
-        api_get :new, :taxonomy_id => taxonomy.id
+      it "can learn how to create a new page" do
+        api_get :new
         expect(json_response["attributes"]).to eq(attributes.map(&:to_s))
         required_attributes = json_response["required_attributes"]
-        expect(required_attributes).to include("name")
+        expect(required_attributes).to include("title")
       end
 
-      it "cannot create a new taxon if not an admin" do
-        api_post :create, :taxonomy_id => taxonomy.id, :taxon => { :name => "Location" }
+      it "cannot create a new page if not an admin" do
+        api_post :create, page: { title: "Location" }
         assert_unauthorized!
       end
 
-      it "cannot update a taxon" do
-        api_put :update, :taxonomy_id => taxonomy.id, :id => taxon.id, :taxon => { :name => "I hacked your store!" }
+      it "cannot update a page" do
+        api_put :update, id: page.id, page: { title: "I hacked your website!" }
         assert_unauthorized!
       end
 
-      it "cannot delete a taxon" do
-        api_delete :destroy, :taxonomy_id => taxonomy.id, :id => taxon.id
+      it "cannot delete a page" do
+        api_delete :destroy, id: page.id
         assert_unauthorized!
       end
     end
@@ -127,48 +119,36 @@ module Refinery
       sign_in_as_admin!
 
       it "can create" do
-        api_post :create, :taxonomy_id => taxonomy.id, :taxon => { :name => "Colors" }
+        api_post :create, page: { title: "Colors" }
         expect(json_response).to have_attributes(attributes)
         expect(response.status).to eq(201)
 
-        expect(taxonomy.reload.root.children.count).to eq 2
-        taxon = Refinery::Taxon.where(:name => 'Colors').first
+        expect(page.reload.root.children.count).to eq 2
+        current_page = Refinery::Page.where(title: 'Colors').first
 
-        expect(taxon.parent_id).to eq taxonomy.root.id
-        expect(taxon.taxonomy_id).to eq taxonomy.id
+        expect(current_page.parent_id).to eq page.root.id
+        expect(current_page.taxonomy_id).to eq page.id
       end
 
       it "can update the position in the list" do
-        taxonomy.root.children << page2
-        api_put :update, :taxonomy_id => taxonomy.id, :id => taxon.id, :taxon => {:parent_id => taxon.parent_id, :child_index => 2 }
+        page.root.children << page2
+        api_put :update, id: page.id, page: { parent_id: page.parent_id, child_index: 2 }
         expect(response.status).to eq(200)
-        expect(taxonomy.reload.root.children[0]).to eql page2
-        expect(taxonomy.reload.root.children[1]).to eql taxon
+        expect(page.reload.root.children[0]).to eql page2
+        expect(page.reload.root.children[1]).to eql page
       end
 
-      it "cannot create a new taxon with invalid attributes" do
-        api_post :create, :taxonomy_id => taxonomy.id, :taxon => {}
+      it "cannot create a new page with invalid attributes" do
+        api_post :create, page: {}
         expect(response.status).to eq(422)
         expect(json_response["error"]).to eq("Invalid resource. Please fix errors and try again.")
         errors = json_response["errors"]
 
-        expect(taxonomy.reload.root.children.count).to eq 1
-      end
-
-      it "cannot create a new taxon with invalid taxonomy_id" do
-        api_post :create, :taxonomy_id => 1000, :taxon => { :name => "Colors" }
-        expect(response.status).to eq(422)
-        expect(json_response["error"]).to eq("Invalid resource. Please fix errors and try again.")
-
-        errors = json_response["errors"]
-        expect(errors["taxonomy_id"]).not_to be_nil
-        expect(errors["taxonomy_id"].first).to eq "Invalid taxonomy id."
-
-        expect(taxonomy.reload.root.children.count).to eq 1
+        expect(page.reload.root.children.count).to eq 1
       end
 
       it "can destroy" do
-        api_delete :destroy, :page_id => page.id, :id => page.id
+        api_delete :destroy, :id => page.id
         expect(response.status).to eq(204)
       end
     end

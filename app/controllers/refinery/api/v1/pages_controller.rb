@@ -4,49 +4,61 @@ module Refinery
       class PagesController < Refinery::Api::BaseController
 
         def index
-          respond_with(pages)
+          if params[:ids]
+            @pages = Refinery::Page.
+                      includes(:translations, :children).
+                      accessible_by(current_ability, :read).
+                      where(id: params[:ids].split(','))
+          else
+            @pages = Refinery::Page.
+                      includes(:translations, :children).
+                      accessible_by(current_ability, :read).
+                      # ransack(params[:q]).result
+                      all
+          end
+
+          respond_with(@pages)
         end
 
         def show
-          respond_with(page)
+          @page = page
+          respond_with(@page)
+        end
+
+        def new
         end
 
         def create
           authorize! :create, Page
-          @page = Page.new(page_params)
+          @page = Refinery::Page.new(page_params)
+
           if @page.save
-            respond_with(@page, :status => 201, :default_template => :show)
+            respond_with(@page, status: 201, default_template: :show)
           else
             invalid_resource!(@page)
           end
         end
 
         def update
-          authorize! :update, Page
+          authorize! :update, page
           if page.update_attributes(page_params)
-            respond_with(page, :status => 200, :default_template => :show)
+            respond_with(page, status: 200, default_template: :show)
           else
-            invalid_resource!(page)
+            invalid_resource!(tpageaxon)
           end
         end
 
         def destroy
-          authorize! :destroy, Page
+          authorize! :destroy, page
           page.destroy
-          respond_with(page, :status => 204)
+          respond_with(page, status: 204)
         end
 
         private
 
-        def pages
-          @pages = Page.
-                    accessible_by(current_ability, :read).
-                    order('lft').includes(:children)
-        end
-
         def page
-          @page ||= Page.
-                      includes(:parts).
+          @page ||= Refinery::Page.
+                      includes(:translations, :parts).
                       accessible_by(current_ability, :read).
                       find(params[:id])
         end
