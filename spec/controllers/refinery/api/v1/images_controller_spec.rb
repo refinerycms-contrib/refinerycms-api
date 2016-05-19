@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Refinery
-  describe Api::V1::ImagesController, type: :controller, focus: true do
+  describe Api::V1::ImagesController, type: :controller  do
     render_views
 
     let!(:attributes_new) { [ { "image" => [] }, "image_size", "image_title", "image_alt" ] }
