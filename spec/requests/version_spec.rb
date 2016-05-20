@@ -1,7 +1,11 @@
 require 'spec_helper'
 
 describe "Version", type: :request do
-  let!(:pages) { 2.times.map { create :page } }
+  let!(:pages) { 2.times.map { FactoryGirl.create(:page) } }
+
+  before do
+    allow(Refinery::Api).to receive(:requires_authentication).and_return(false)
+  end
 
   describe "/api" do
     it "be a redirect" do
