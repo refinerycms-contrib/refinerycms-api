@@ -37,7 +37,7 @@ module Refinery
       ]
 
       @@resource_attributes = [
-        :resource_title, file: []
+        :resource_title, { file: [] }
       ]
     end
   end

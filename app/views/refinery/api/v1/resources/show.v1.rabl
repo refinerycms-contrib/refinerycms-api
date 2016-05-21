@@ -1,6 +1,6 @@
 object @resource
-attributes *resource_attributes
+attributes :resource_title
 
-node :resource do |resource|
-  resource.file.url
+node :file do |file|
+  file.file.url
 end

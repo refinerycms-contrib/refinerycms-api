@@ -31,11 +31,12 @@ module Refinery
 
         def create
           authorize! :create, Resource
-          @resource = Refinery::Resource.new(resource_params)
-          if @resource.save
-            respond_with(@resource, status: 201, default_template: :show)
+          @resources = Refinery::Resource.create_resources(resource_params)
+
+          if @resources.all?(&:valid?)
+            respond_with(@resources, status: 201, default_template: :show)
           else
-            invalid_resource!(@resource)
+            invalid_resource!(@resources)
           end
         end
 
