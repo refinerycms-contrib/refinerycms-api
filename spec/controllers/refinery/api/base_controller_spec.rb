@@ -3,11 +3,11 @@ require 'spec_helper'
 class FakesController < Refinery::Api::BaseController
 end
 
-describe Refinery::Api::BaseController, :type => :controller do
+describe Refinery::Api::BaseController, type: :controller do
   render_views
   controller(Refinery::Api::BaseController) do
     def index
-      render :text => { "pages" => [] }.to_json
+      render text: { "pages": [] }.to_json
     end
   end
 
@@ -16,29 +16,6 @@ describe Refinery::Api::BaseController, :type => :controller do
       r.draw { get 'index', to: 'refinery/api/base#index' }
     end
   end
-
-  # context "when validating based on an order token" do
-  #   let!(:order) { create :order }
-
-  #   context "with a correct order token" do
-  #     it "succeeds" do
-  #       api_get :index, order_token: order.guest_token, order_id: order.number
-  #       expect(response.status).to eq(200)
-  #     end
-
-  #     it "succeeds with an order_number parameter" do
-  #       api_get :index, order_token: order.guest_token, order_number: order.number
-  #       expect(response.status).to eq(200)
-  #     end
-  #   end
-
-  #   context "with an incorrect order token" do
-  #     it "returns unauthorized" do
-  #       api_get :index, order_token: "NOT_A_TOKEN", order_id: order.number
-  #       expect(response.status).to eq(401)
-  #     end
-  #   end
-  # end
 
   context "cannot make a request to the API" do
     it "without an API key" do
@@ -55,7 +32,7 @@ describe Refinery::Api::BaseController, :type => :controller do
     end
 
     it "using an invalid token param" do
-      get :index, :token => "fake_key"
+      get :index, token: "fake_key"
       expect(json_response).to eq({ "error" => "Invalid API key (fake_key) specified." })
     end
   end
@@ -79,11 +56,11 @@ describe Refinery::Api::BaseController, :type => :controller do
   end
 
   it "maps semantic keys to nested_attributes keys" do
-    klass = double(:nested_attributes_options => { :line_items => {},
-                                                  :bill_address => {} })
-    attributes = { 'line_items' => { :id => 1 },
-                   'bill_address' => { :id => 2 },
-                   'name' => 'test order' }
+    klass = double(nested_attributes_options: { line_items: {},
+                                                  bill_address: {} })
+    attributes = { 'line_items': { id: 1 },
+                   'bill_address': { id: 2 },
+                   'name': 'test order' }
 
     mapped = subject.map_nested_attributes_keys(klass, attributes)
     expect(mapped.has_key?('line_items_attributes')).to be true
