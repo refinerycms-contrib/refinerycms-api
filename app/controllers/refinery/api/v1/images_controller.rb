@@ -22,11 +22,25 @@ module Refinery
 
         def create
           authorize! :create, Image
-          @image = Refinery::Image.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
+          @images = []
+          begin
+            if params[:image].present? && params[:image][:image].is_a?(Array)
+              params[:image][:image].each do |image|
+                params[:image][:image_title] = params[:image][:image_title].presence || auto_title(image.original_filename)
+                @images << (@image = ::Refinery::Image.create({image: image}.merge(image_params.except(:image))))
+              end
+            else
+              @images << (@image = ::Refinery::Image.create(image_params))
+            end
+          rescue NotImplementedError
+            logger.warn($!.message)
+            @image = ::Refinery::Image.new
+          end
+
+          if @images.all?(&:valid?)
+            respond_with(@images, status: 201, default_template: :show)
           else
-            invalid_resource!(@image)
+            invalid_resource!(@images)
           end
         end
 
@@ -43,6 +57,12 @@ module Refinery
           @image = Refinery::Image.accessible_by(current_ability, :destroy).find(params[:id])
           @image.destroy
           respond_with(@image, status: 204)
+        end
+
+        protected
+
+        def auto_title(filename)
+          CGI::unescape(filename.to_s).gsub(/\.\w+$/, '').titleize
         end
 
         private
