@@ -14,7 +14,7 @@ module Refinery
                       includes(:translations, :children).
                       accessible_by(current_ability, :read).
                       # ransack(params[:q]).result
-                      all
+                      order(:lft)
           end
 
           respond_with(@pages)
