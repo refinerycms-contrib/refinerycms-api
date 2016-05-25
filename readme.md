@@ -37,6 +37,11 @@ Then restart your server.
 $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/pages
 $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/pages/1
 $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/pages/new
+
+$ curl -X POST --header "X-Refinery-Token: YOUR_API_TOKEN" "http://localhost:3000/api/v1/pages" -d 'page[title]=test'
+$ curl -X PUT --header "X-Refinery-Token: YOUR_API_TOKEN" "http://localhost:3000/api/v1/pages/1" -d 'page[title]=test2'
+$ curl -X DELETE -H "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/pages/1
+curl -X DELETE -H "X-Refinery-Token: 123" http://localhost:3000/api/v1/pages/1
 ```
 
 ### Images
