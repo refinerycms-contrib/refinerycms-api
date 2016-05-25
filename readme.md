@@ -36,6 +36,7 @@ Then restart your server.
 ```ruby
 $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/pages
 $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/pages/1
+$ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/pages/new
 ```
 
 ### Images
@@ -43,6 +44,7 @@ $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/
 ```ruby
 $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/images
 $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/images/1
+$ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/images/new
 ```
 
 ### Resources
@@ -50,6 +52,7 @@ $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/
 ```ruby
 $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/resources
 $ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/resources/1
+$ curl --header "X-Refinery-Token: YOUR_API_TOKEN" http://localhost:3000/api/v1/resources/new
 ```
 
 ## Contributing
