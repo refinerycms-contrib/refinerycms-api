@@ -3,7 +3,6 @@ require_dependency 'refinery/api/controller_setup'
 module Refinery
   module Api
     class BaseController < ActionController::Base
-      include Refinery::ApplicationController
       include Refinery::Api::ControllerSetup
       include Refinery::Api::ControllerHelpers::StrongParameters
 
@@ -49,6 +48,14 @@ module Refinery
           "text/xml; charset=utf-8"
         end
       end
+
+      protected
+
+      def authorisation_manager
+        @authorisation_manager ||= ::Refinery::Core::AuthorisationManager.new
+      end
+      # We ❤ you, too ️
+      alias_method :authorization_manager, :authorisation_manager
 
       private
 
