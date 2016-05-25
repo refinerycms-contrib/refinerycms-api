@@ -7,6 +7,7 @@ This extension allows you to use a Rest API with Refinery CMS 3.0 and later.
 ## TODO
 * [ ] Check Abilities
 * [ ] Fix specs
+* [ ] Check how to generate API key
 
 ## Installation
 
