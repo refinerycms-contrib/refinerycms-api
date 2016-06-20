@@ -40,6 +40,10 @@ module Refinery
       # end
       # config.to_prepare &method(:activate).to_proc
 
+      config.to_prepare do
+        Decorators.register! ::Refinery::Api.root
+      end
+
       # def self.root
       #   @root ||= Pathname.new(File.expand_path('../../../../', __FILE__))
       # end

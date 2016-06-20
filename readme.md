@@ -7,7 +7,6 @@ This extension allows you to use a Rest API with Refinery CMS 3.0 and later.
 ## TODO
 * [ ] Check Abilities
 * [ ] Fix specs
-* [ ] Check how to generate API key (create a rake task)
 
 ## Installation
 
@@ -30,6 +29,12 @@ $ rake db:migrate
 Then restart your server.
 
 ## Usage
+
+### Create an API Token for your user
+
+```ruby
+$ rake refinery_api:user:api_key:generate EMAIL=refinery@example.org
+```
 
 ### Pages
 
