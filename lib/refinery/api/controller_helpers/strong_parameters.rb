@@ -10,31 +10,18 @@ module Refinery
                  to: :permitted_attributes,
                  prefix: :permitted
 
-        def permitted_payment_attributes
-          permitted_attributes.payment_attributes + [
-            source_attributes: permitted_source_attributes
+        def permitted_image_attributes
+          permitted_attributes.image_attributes
+        end
+
+        def permitted_page_attributes
+          permitted_attributes.page_attributes + [
+            page_parts_attributes: permitted_page_parts_attributes
           ]
         end
 
-        def permitted_checkout_attributes
-          permitted_attributes.checkout_attributes + [
-            bill_address_attributes: permitted_address_attributes,
-            ship_address_attributes: permitted_address_attributes,
-            payments_attributes: permitted_payment_attributes,
-            shipments_attributes: permitted_shipment_attributes
-          ]
-        end
-
-        def permitted_order_attributes
-          permitted_checkout_attributes + [
-            line_items_attributes: permitted_line_item_attributes
-          ]
-        end
-
-        def permitted_product_attributes
-          permitted_attributes.product_attributes + [
-            product_properties_attributes: permitted_product_properties_attributes
-          ]
+        def permitted_resource_attributes
+          permitted_attributes.resource_attributes
         end
       end
     end
