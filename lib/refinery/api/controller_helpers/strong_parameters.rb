@@ -16,7 +16,7 @@ module Refinery
 
         def permitted_page_attributes
           permitted_attributes.page_attributes + [
-            page_parts_attributes: permitted_page_parts_attributes
+            page_parts_attributes: permitted_page_part_attributes
           ]
         end
 
