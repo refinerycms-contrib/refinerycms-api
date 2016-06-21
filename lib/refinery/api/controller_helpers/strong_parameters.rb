@@ -23,6 +23,10 @@ module Refinery
         def permitted_resource_attributes
           permitted_attributes.resource_attributes
         end
+
+        def permitted_blog_post_attributes
+          permitted_attributes.blog_post_attributes
+        end
       end
     end
   end

@@ -42,6 +42,7 @@ module Refinery
         can :display, Image
         can :display, Page
         can :display, Resource
+        can :display, Blog::Post if defined?(Refinery::Blog)
       end
 
       # Include any abilities registered by extensions, etc.

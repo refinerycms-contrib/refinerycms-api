@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
 gem "refinerycms-authentication-devise", '~> 1.0.4'
+gem "refinerycms-blog", github: 'refinery/refinerycms-blog', branch: 'bugfix/decoupling'
 
 gemspec
 

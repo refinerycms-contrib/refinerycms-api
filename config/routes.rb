@@ -8,6 +8,10 @@ Refinery::Core::Engine.routes.draw do
       end
 
       resources :resources
+
+      namespace :blog do
+        resources :posts
+      end
     end
 
     match 'v:api/*path', to: redirect("/api/v1/%{path}"), via: [:get, :post, :put, :patch, :delete]
