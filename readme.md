@@ -33,7 +33,7 @@ Then restart your server.
 ### Create an API Token for your user
 
 ```ruby
-$ rake refinery_api:user:api_key:generate EMAIL=refinery@example.org
+$ rake refinery_api:user:api_token:generate EMAIL=refinery@example.org
 ```
 
 ### Pages
