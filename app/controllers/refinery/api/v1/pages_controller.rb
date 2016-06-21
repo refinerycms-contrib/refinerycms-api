@@ -44,7 +44,7 @@ module Refinery
           if page.update_attributes(page_params)
             respond_with(page, status: 200, default_template: :show)
           else
-            invalid_resource!(tpageaxon)
+            invalid_resource!(page)
           end
         end
 
