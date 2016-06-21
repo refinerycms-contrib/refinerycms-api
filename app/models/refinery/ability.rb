@@ -43,6 +43,7 @@ module Refinery
         can :display, Page
         can :display, Resource
         can :display, Blog::Post if defined?(Refinery::Blog)
+        can :display, Inquiries::Inquiry if defined?(Refinery::Inquiries)
       end
 
       # Include any abilities registered by extensions, etc.

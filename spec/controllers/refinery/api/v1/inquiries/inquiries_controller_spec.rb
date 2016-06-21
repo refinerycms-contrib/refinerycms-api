@@ -1,26 +1,24 @@
 require 'spec_helper'
 
 module Refinery
-  describe Api::V1::Blog::PostsController, type: :controller do
+  describe Api::V1::Inquiries::InquiriesController, type: :controller do
     render_views
 
-    let!(:post) { FactoryGirl.create(:blog_post, :title => "Ruby") }
+    let!(:inquiry) { FactoryGirl.create(:inquiry) }
 
-    let!(:attributes_new) { [ "title", "body", "custom_teaser", "tag_list", "draft", "published_at", "custom_url", "user_id", "username", "browser_title", "meta_description", "source_url", "source_url_title", {"category_ids"=>[]} ] }
-    let!(:attributes) { [ "title", "body", "custom_teaser", "tag_list", "draft", "published_at", "custom_url", "user_id", "username", "browser_title", "meta_description", "source_url", "source_url_title", "category_ids" ] }
+    let!(:attributes) { [ "name", "phone", "message", "email"] }
 
     before do
       stub_authentication!
     end
 
     context "as a normal user" do
-      it "can get a list of blog posts" do
+      it "can get a list of inquiries" do
         api_get :index
 
         expect(response.status).to eq(200)
-        expect(json_response).to have_key("posts")
-        attributes.delete("category_ids")
-        expect(json_response["posts"].first.keys).to eq(attributes)
+        expect(json_response).to have_key("inquiries")
+        expect(json_response["inquiries"].first.keys).to eq(attributes)
       end
 
       # it "paginates through taxons" do
@@ -73,32 +71,27 @@ module Refinery
       #   end
       # end
 
-      it "gets a single blog post" do
-        api_get :show, id: post.id
+      it "gets a single inquiry" do
+        api_get :show, id: inquiry.id
 
-        expect(json_response['title']).to eq post.title
-        expect(json_response['posts']).to be_nil
+        expect(json_response['name']).to eq inquiry.name
+        expect(json_response['inquiries']).to be_nil
       end
 
-      it "can learn how to create a new blog post" do
+      it "can learn how to create a new inquiry" do
         api_get :new
-        expect(json_response["attributes"]).to eq(attributes_new)
+        expect(json_response["attributes"]).to eq(attributes)
         required_attributes = json_response["required_attributes"]
-        expect(required_attributes).to include("title")
+        expect(required_attributes).to include("name")
       end
 
-      it "cannot create a new blog post if not an admin" do
-        api_post :create, blog_post: { title: "Location" }
+      it "cannot create a new inquiry if not an admin" do
+        api_post :create, inquiry: { name: "John Doe", message: "Hello world!", email: "refinery@example.org" }
         assert_unauthorized!
       end
 
-      it "cannot update a blog post" do
-        api_put :update, id: post.id, post: { title: "I hacked your website!" }
-        assert_unauthorized!
-      end
-
-      it "cannot delete a blog post" do
-        api_delete :destroy, id: post.id
+      it "cannot delete a inquiry" do
+        api_delete :destroy, id: inquiry.id
         assert_unauthorized!
       end
     end
@@ -108,30 +101,23 @@ module Refinery
 
       it "can create" do
         expect do
-          api_post :create, post: { title: "Colors", body: "Colors of life", published_at: Time.now, username: "John Doe" }
-          attributes.delete("category_ids")
+          api_post :create, inquiry: { name: "John Doe", message: "Hello world!", email: "refinery@example.org" }
           expect(json_response.keys).to eq(attributes)
           expect(response.status).to eq(201)
-        end.to change(Blog::Post, :count).by(1)
+        end.to change(Inquiries::Inquiry, :count).by(1)
       end
 
-      it "can update the title" do
-        api_put :update, id: post.id, post: { title: "I update your website!" }
-        expect(response.status).to eq(200)
-        expect(Blog::Post.last.title).to eql "I update your website!"
-      end
-
-      it "cannot create a new blog post with invalid attributes" do
-        api_post :create, post: {}
+      it "cannot create a new inquiry with invalid attributes" do
+        api_post :create, inquiry: {}
         expect(response.status).to eq(422)
         expect(json_response["error"]).to eq("Invalid resource. Please fix errors and try again.")
         errors = json_response["errors"]
 
-        expect(Blog::Post.count).to eq 1
+        expect(Inquiries::Inquiry.count).to eq 1
       end
 
       it "can destroy" do
-        api_delete :destroy, :id => post.id
+        api_delete :destroy, :id => inquiry.id
         expect(response.status).to eq(204)
       end
     end

@@ -12,6 +12,10 @@ Refinery::Core::Engine.routes.draw do
       namespace :blog do
         resources :posts
       end
+
+      namespace :inquiries do
+        resources :inquiries, only: [:new, :create, :index, :show, :destroy]
+      end
     end
 
     match 'v:api/*path', to: redirect("/api/v1/%{path}"), via: [:get, :post, :put, :patch, :delete]

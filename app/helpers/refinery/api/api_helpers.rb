@@ -6,7 +6,8 @@ module Refinery
         :page_attributes,
         :page_part_attributes,
         :resource_attributes,
-        :blog_post_attributes
+        :blog_post_attributes,
+        :inquiries_inquiry_attributes
       ]
 
       mattr_reader *ATTRIBUTES
@@ -45,7 +46,9 @@ module Refinery
         :title, :body, :custom_teaser, :tag_list,
         :draft, :published_at, :custom_url, :user_id, :username, :browser_title,
         :meta_description, :source_url, :source_url_title, category_ids: []
-      ]    
+      ]
+
+      @@inquiries_inquiry_attributes = [:name, :phone, :message, :email]
     end
   end
 end

@@ -27,6 +27,10 @@ module Refinery
         def permitted_blog_post_attributes
           permitted_attributes.blog_post_attributes
         end
+
+        def permitted_inquiries_inquiry_attributes
+          permitted_attributes.inquiries_inquiry_attributes
+        end
       end
     end
   end
