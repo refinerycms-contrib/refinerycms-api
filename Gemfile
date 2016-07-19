@@ -6,7 +6,7 @@ gem "refinerycms-inquiries", github: 'refinery/refinerycms-inquiries', branch: '
 
 gemspec
 
-git "https://github.com/refinery/refinerycms", branch: "master" do
+git "https://github.com/refinery/refinerycms", branch: "3-0-stable" do
   gem "refinerycms"
 
   group :test do
