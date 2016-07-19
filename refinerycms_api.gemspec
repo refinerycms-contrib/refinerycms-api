@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.name          = %q{refinerycms-api}
   s.require_paths = ["lib"]
-  s.version       = %q{1.0.0}
+  s.version       = %q{1.0.0.beta}
 
   s.add_dependency 'refinerycms-core',  ['~> 3.0', '>= 3.0.0']
   s.add_dependency 'cancancan', '~> 1.10.1'
