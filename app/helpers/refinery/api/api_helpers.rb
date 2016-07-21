@@ -25,30 +25,32 @@ module Refinery
       end
 
       @@image_attributes = [
-        { image: [] }, :image_size, :image_title, :image_alt
+        :id, { image: [] }, :image_size, :image_title, :image_alt
       ]
 
       @@page_attributes = [
-        :browser_title, :draft, :link_url, :menu_title, :meta_description,
+        :id, :browser_title, :draft, :link_url, :menu_title, :meta_description,
         :parent_id, :skip_to_first_child, :show_in_menu, :title, :view_template,
         :layout_template, :custom_slug, parts_attributes: [:id, :title, :slug, :body, :position]
       ]
 
       @@page_part_attributes = [
-        :title, :slug, :body, :locale
+        :id, :title, :slug, :body, :locale
       ]
 
       @@resource_attributes = [
-        :resource_title, { file: [] }
+        :id, :resource_title, { file: [] }
       ]
 
       @@blog_post_attributes = [
-        :title, :body, :custom_teaser, :tag_list,
+        :id, :title, :body, :custom_teaser, :tag_list,
         :draft, :published_at, :custom_url, :user_id, :username, :browser_title,
         :meta_description, :source_url, :source_url_title, category_ids: []
       ]
 
-      @@inquiries_inquiry_attributes = [:name, :phone, :message, :email]
+      @@inquiries_inquiry_attributes = [
+        :id, :name, :phone, :message, :email
+      ]
     end
   end
 end

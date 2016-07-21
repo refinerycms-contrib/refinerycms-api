@@ -7,7 +7,7 @@ module Refinery
     let(:page) { FactoryGirl.create(:page, :title => "Ruby") }
     let(:page2) { FactoryGirl.create(:page, :title => "Rails") }
     let(:page_with_page_part) { FactoryGirl.create(:page_with_page_part) }
-    let(:attributes) { ["browser_title", "draft", "link_url", "menu_title", "meta_description", "parent_id", "skip_to_first_child", "show_in_menu", "title", "view_template", "layout_template", "custom_slug", {"parts_attributes"=>["id", "title", "slug", "body", "position"]}] }
+    let(:attributes) { ["id", "browser_title", "draft", "link_url", "menu_title", "meta_description", "parent_id", "skip_to_first_child", "show_in_menu", "title", "view_template", "layout_template", "custom_slug", {"parts_attributes"=>["id", "title", "slug", "body", "position"]}] }
 
     before do
       stub_authentication!

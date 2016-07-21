@@ -6,7 +6,7 @@ module Refinery
 
     let!(:inquiry) { FactoryGirl.create(:inquiry) }
 
-    let!(:attributes) { [ "name", "phone", "message", "email"] }
+    let!(:attributes) { [ "id", "name", "phone", "message", "email"] }
 
     before do
       stub_authentication!

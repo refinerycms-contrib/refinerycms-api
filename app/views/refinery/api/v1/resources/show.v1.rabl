@@ -1,5 +1,5 @@
 object @resource
-attributes :resource_title
+attributes :id, :resource_title
 
 node :file do |file|
   file.file.url

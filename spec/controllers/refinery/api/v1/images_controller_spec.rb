@@ -4,8 +4,8 @@ module Refinery
   describe Api::V1::ImagesController, type: :controller  do
     render_views
 
-    let!(:attributes_new) { [ { "image" => [] }, "image_size", "image_title", "image_alt" ] }
-    let!(:attributes) { [ "image", "image_size", "image_title", "image_alt" ] }
+    let!(:attributes_new) { [ "id", { "image" => [] }, "image_size", "image_title", "image_alt" ] }
+    let!(:attributes) { [ "id", "image", "image_size", "image_title", "image_alt" ] }
 
     before do
       stub_authentication!

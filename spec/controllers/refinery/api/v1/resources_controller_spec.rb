@@ -4,8 +4,8 @@ module Refinery
   describe Api::V1::ResourcesController, type: :controller do
     render_views
 
-    let!(:attributes_new) { [ "resource_title",  { "file" => [] } ] }
-    let!(:attributes) { [ "resource_title", "file" ] }
+    let!(:attributes_new) { [ "id", "resource_title",  { "file" => [] } ] }
+    let!(:attributes) { [ "id", "resource_title", "file" ] }
 
     before do
       stub_authentication!

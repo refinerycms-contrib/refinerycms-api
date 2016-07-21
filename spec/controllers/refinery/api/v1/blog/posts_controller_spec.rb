@@ -6,8 +6,8 @@ module Refinery
 
     let!(:post) { FactoryGirl.create(:blog_post, :title => "Ruby") }
 
-    let!(:attributes_new) { [ "title", "body", "custom_teaser", "tag_list", "draft", "published_at", "custom_url", "user_id", "username", "browser_title", "meta_description", "source_url", "source_url_title", {"category_ids"=>[]} ] }
-    let!(:attributes) { [ "title", "body", "custom_teaser", "tag_list", "draft", "published_at", "custom_url", "user_id", "username", "browser_title", "meta_description", "source_url", "source_url_title", "category_ids" ] }
+    let!(:attributes_new) { [ "id", "title", "body", "custom_teaser", "tag_list", "draft", "published_at", "custom_url", "user_id", "username", "browser_title", "meta_description", "source_url", "source_url_title", {"category_ids"=>[]} ] }
+    let!(:attributes) { [ "id", "title", "body", "custom_teaser", "tag_list", "draft", "published_at", "custom_url", "user_id", "username", "browser_title", "meta_description", "source_url", "source_url_title", "category_ids" ] }
 
     before do
       stub_authentication!
