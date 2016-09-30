@@ -13,7 +13,7 @@ This extension allows you to use a Rest API with Refinery CMS 3.0 and later.
 Simply put this in the Gemfile of your Refinery application:
 
 ```ruby
-gem 'refinerycms-api', github: 'refinerycms-contrib/refinerycms-api', master: 'branch'
+gem 'refinerycms-api', github: 'refinerycms-contrib/refinerycms-api', branch: 'master'
 ```
 
 Then run `bundle install` to install it.
