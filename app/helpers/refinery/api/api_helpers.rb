@@ -7,7 +7,8 @@ module Refinery
         :page_part_attributes,
         :resource_attributes,
         :blog_post_attributes,
-        :inquiries_inquiry_attributes
+        :inquiries_inquiry_attributes,
+        :image_page_attributes
       ]
 
       mattr_reader *ATTRIBUTES
@@ -50,6 +51,10 @@ module Refinery
 
       @@inquiries_inquiry_attributes = [
         :id, :name, :phone, :message, :email
+      ]
+
+      @@image_page_attributes = [
+        :image_id, :page_id, :position, :caption, :id, :page_type
       ]
     end
   end
