@@ -36,7 +36,7 @@ module Refinery
       ]
 
       @@page_part_attributes = [
-        :id, :title, :slug, :body, :locale
+        :id, :title, :slug, :body, :position, :title
       ]
 
       @@resource_attributes = [
