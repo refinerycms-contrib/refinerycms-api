@@ -8,11 +8,11 @@ if defined?(Refinery::Inquiries)
             def index
               if params[:ids]
                 @inquiries = Refinery::Inquiries::Inquiry.
-                          accessible_by(current_ability, :read).
+                          accessible_by(current_ability, :manage).
                           where(id: params[:ids].split(','))
               else
                 @inquiries = Refinery::Inquiries::Inquiry.
-                          accessible_by(current_ability, :read).
+                          accessible_by(current_ability, :manage).
                           # ransack(params[:q]).result
                           order("created_at DESC")
               end
@@ -29,7 +29,6 @@ if defined?(Refinery::Inquiries)
             end
 
             def create
-              authorize! :create, ::Refinery::Inquiries::Inquiry
               @inquiry = Refinery::Inquiries::Inquiry.new(inquiry_params)
 
               if @inquiry.save
@@ -49,7 +48,7 @@ if defined?(Refinery::Inquiries)
 
             def inquiry
               @inquiry ||= Refinery::Inquiries::Inquiry.
-                          accessible_by(current_ability, :read).
+                          accessible_by(current_ability, :manage).
                           find(params[:id])
             end
 
