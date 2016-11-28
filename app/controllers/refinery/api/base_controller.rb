@@ -10,7 +10,6 @@ module Refinery
 
       before_action :set_content_type
       before_action :load_user
-      before_action :authorize_for_order, if: Proc.new { order_token.present? }
       before_action :authenticate_user
       before_action :load_user_roles
 
@@ -29,15 +28,6 @@ module Refinery
           h[key] = v
           h
         end.with_indifferent_access
-      end
-
-      # users should be able to set price when importing orders via api
-      def permitted_line_item_attributes
-        if @current_user_roles.include?("admin")
-          super + [:price, :variant_id, :sku]
-        else
-          super
-        end
       end
 
       def content_type
@@ -70,9 +60,9 @@ module Refinery
       def authenticate_user
         return if @current_api_user
 
-        if requires_authentication? && api_key.blank? && order_token.blank?
+        if requires_authentication? && api_key.blank?
           render "refinery/api/errors/must_specify_api_key", status: 401 and return
-        elsif order_token.blank? && (requires_authentication? || api_key.present?)
+        elsif requires_authentication? || api_key.present?
           render "refinery/api/errors/invalid_api_key", status: 401 and return
         else
           # An anonymous user
@@ -125,50 +115,6 @@ module Refinery
         request.headers["X-Refinery-Token"] || params[:token]
       end
       helper_method :api_key
-
-      def order_token
-        request.headers["X-Refinery-Order-Token"] || params[:order_token]
-      end
-
-      def find_product(id)
-        product_scope.friendly.find(id.to_s)
-      rescue ActiveRecord::RecordNotFound
-        product_scope.find(id)
-      end
-
-      def product_scope
-        if @current_user_roles.include?("admin")
-          scope = Product.with_deleted.accessible_by(current_ability, :read).includes(*product_includes)
-
-          unless params[:show_deleted]
-            scope = scope.not_deleted
-          end
-          unless params[:show_discontinued]
-            scope = scope.not_discontinued
-          end
-        else
-          scope = Product.accessible_by(current_ability, :read).active.includes(*product_includes)
-        end
-
-        scope
-      end
-
-      def variants_associations
-        [{ option_values: :option_type }, :default_price, :images]
-      end
-
-      def product_includes
-        [:option_types, :taxons, product_properties: :property, variants: variants_associations, master: variants_associations]
-      end
-
-      def order_id
-        params[:order_id] || params[:checkout_id] || params[:order_number]
-      end
-
-      def authorize_for_order
-        @order = Refinery::Order.find_by(number: order_id)
-        authorize! :read, @order, order_token
-      end
     end
   end
 end

@@ -66,8 +66,4 @@ describe Refinery::Api::BaseController, type: :controller do
     expect(mapped.has_key?('line_items_attributes')).to be true
     expect(mapped.has_key?('name')).to be true
   end
-
-  it "lets a subclass override the product associations that are eager-loaded" do
-    expect(controller.respond_to?(:product_includes, true)).to be
-  end
 end
