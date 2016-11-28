@@ -39,14 +39,6 @@ module Refinery
         end
       end
 
-      protected
-
-      def authorisation_manager
-        @authorisation_manager ||= ::Refinery::Core::AuthorisationManager.new
-      end
-      # We ❤ you, too ️
-      alias_method :authorization_manager, :authorisation_manager
-
       private
 
       def set_content_type
